@@ -1,0 +1,443 @@
+/* =============================================================
+   AI Sandbox IDE — Global Design System
+   ============================================================= */
+
+@import "tailwindcss";
+
+/* --- Custom fonts --- */
+:root {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+  /* ---- Dark theme palette ---- */
+  --bg-base:       #0a0a0f;
+  --bg-surface:    #111118;
+  --bg-elevated:   #16161f;
+  --bg-overlay:    #1c1c28;
+  --bg-muted:      #22222f;
+
+  --border:        #2a2a3a;
+  --border-subtle: #1e1e2e;
+
+  --text-primary:  #f0f0ff;
+  --text-secondary:#9898b8;
+  --text-muted:    #5a5a7a;
+  --text-accent:   #a78bfa;
+
+  --accent:        #7c3aed;
+  --accent-bright: #8b5cf6;
+  --accent-glow:   rgba(124, 58, 237, 0.35);
+  --accent-light:  rgba(139, 92, 246, 0.15);
+
+  --success:       #10b981;
+  --warning:       #f59e0b;
+  --error:         #ef4444;
+  --info:          #3b82f6;
+
+  --sidebar-w:     260px;
+  --navbar-h:      52px;
+  --radius:        10px;
+  --radius-lg:     14px;
+  --radius-xl:     18px;
+
+  --shadow-sm:     0 1px 3px rgba(0,0,0,0.5);
+  --shadow-md:     0 4px 16px rgba(0,0,0,0.6);
+  --shadow-lg:     0 8px 32px rgba(0,0,0,0.7);
+  --shadow-glow:   0 0 40px rgba(124, 58, 237, 0.2);
+
+  --transition:    all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---- Light theme ---- */
+.light {
+  --bg-base:       #f8f8fc;
+  --bg-surface:    #ffffff;
+  --bg-elevated:   #f0f0f8;
+  --bg-overlay:    #e8e8f0;
+  --bg-muted:      #dcdce8;
+
+  --border:        #d4d4e8;
+  --border-subtle: #e8e8f4;
+
+  --text-primary:  #0f0f1a;
+  --text-secondary:#4a4a6a;
+  --text-muted:    #8a8aaa;
+  --text-accent:   #7c3aed;
+
+  --accent-light:  rgba(124, 58, 237, 0.08);
+  --shadow-sm:     0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md:     0 4px 16px rgba(0,0,0,0.12);
+  --shadow-lg:     0 8px 32px rgba(0,0,0,0.16);
+  --shadow-glow:   0 0 40px rgba(124, 58, 237, 0.1);
+}
+
+/* =============================================================
+   Reset & Base
+   ============================================================= */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* Selection */
+::selection { background: var(--accent-light); color: var(--text-primary); }
+
+/* =============================================================
+   Utility Classes
+   ============================================================= */
+
+.glass {
+  background: rgba(22, 22, 31, 0.7);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--border);
+}
+
+.light .glass {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.glow-ring {
+  box-shadow: 0 0 0 1px var(--accent), var(--shadow-glow);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 50%, #4f46e5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+}
+
+/* =============================================================
+   Layout
+   ============================================================= */
+
+.ide-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background: var(--bg-base);
+  overflow: hidden;
+}
+
+.ide-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* =============================================================
+   Navbar
+   ============================================================= */
+
+.navbar {
+  height: var(--navbar-h);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+  flex-shrink: 0;
+  z-index: 100;
+}
+
+/* =============================================================
+   File Explorer
+   ============================================================= */
+
+.file-tree-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-secondary);
+  transition: var(--transition);
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-tree-item:hover {
+  background: var(--bg-muted);
+  color: var(--text-primary);
+}
+
+.file-tree-item.selected {
+  background: var(--accent-light);
+  color: var(--text-accent);
+}
+
+/* =============================================================
+   Editor Tabs
+   ============================================================= */
+
+.editor-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-right: 1px solid var(--border);
+  cursor: pointer;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  background: var(--bg-surface);
+  transition: var(--transition);
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.editor-tab:hover { background: var(--bg-elevated); color: var(--text-secondary); }
+.editor-tab.active { background: var(--bg-base); color: var(--text-primary); border-bottom: 2px solid var(--accent-bright); }
+
+/* =============================================================
+   Chat
+   ============================================================= */
+
+.chat-bubble {
+  max-width: 88%;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+
+.chat-bubble.user {
+  background: var(--accent);
+  color: white;
+  border-bottom-right-radius: 4px;
+  align-self: flex-end;
+}
+
+.chat-bubble.assistant {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 4px;
+  align-self: flex-start;
+  color: var(--text-primary);
+}
+
+/* =============================================================
+   Terminal
+   ============================================================= */
+
+.terminal-wrapper {
+  background: #0d0d12;
+  padding: 8px;
+  font-family: var(--font-mono);
+  flex: 1;
+  overflow: hidden;
+}
+
+.terminal-wrapper .xterm {
+  height: 100%;
+}
+
+/* =============================================================
+   Resizable Panel Handle
+   ============================================================= */
+
+[data-panel-resize-handle-id] {
+  background: var(--border);
+  transition: background 0.15s;
+}
+
+[data-panel-resize-handle-id]:hover,
+[data-panel-resize-handle-id][data-resize-handle-active] {
+  background: var(--accent-bright);
+}
+
+/* =============================================================
+   Animations (Keyframes)
+   ============================================================= */
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.85); }
+}
+
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+@keyframes gradient-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-12px); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* =============================================================
+   Landing specific
+   ============================================================= */
+
+.landing-bg {
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,58,237,0.25) 0%, transparent 70%),
+              radial-gradient(ellipse 50% 40% at 80% 80%, rgba(79,70,229,0.15) 0%, transparent 60%),
+              var(--bg-base);
+}
+
+.landing-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+  color: white;
+  border: none;
+  padding: 14px 36px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+  letter-spacing: 0.01em;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(124,58,237,0.55);
+}
+
+.btn-primary:active { transform: translateY(0); }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* =============================================================
+   Markdown inside chat
+   ============================================================= */
+
+.prose-chat h1, .prose-chat h2, .prose-chat h3 {
+  margin: 12px 0 6px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.prose-chat p { margin-bottom: 8px; }
+.prose-chat ul, .prose-chat ol { padding-left: 20px; margin-bottom: 8px; }
+.prose-chat li { margin-bottom: 2px; }
+.prose-chat code {
+  background: var(--bg-muted);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.prose-chat pre {
+  background: var(--bg-base);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  overflow-x: auto;
+  margin: 8px 0;
+}
+.prose-chat pre code { background: none; padding: 0; }
+.prose-chat a { color: var(--accent-bright); text-decoration: underline; }
+.prose-chat strong { font-weight: 600; color: var(--text-primary); }
+.prose-chat blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 12px;
+  color: var(--text-secondary);
+  margin: 8px 0;
+}
+
+/* =============================================================
+   Typing indicator
+   ============================================================= */
+.typing-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--accent-bright);
+  border-radius: 50%;
+  animation: bounce-dot 1.2s infinite ease-in-out;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce-dot {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+  40%           { transform: scale(1); opacity: 1; }
+}
+
+/* =============================================================
+   Event timeline
+   ============================================================= */
+.event-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  padding: 6px 0;
+  position: relative;
+}
+.event-item::before {
+  content: '';
+  width: 2px;
+  background: var(--border);
+  position: absolute;
+  left: 7px;
+  top: 22px;
+  bottom: -6px;
+}
+.event-item:last-child::before { display: none; }
+.event-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--bg-elevated);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.event-dot.done { background: var(--success); border-color: var(--success); }
+.event-dot.pending { background: var(--accent); border-color: var(--accent); animation: pulse-dot 1s infinite; }
+.event-dot.error  { background: var(--error); border-color: var(--error); }
