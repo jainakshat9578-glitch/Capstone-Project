@@ -6,7 +6,6 @@ export async function createPod(sandboxId){
         metadata: {
             name: `sandbox-pod-${sandboxId}`,
             labels: {
-                app: "sandbox",
                 sandboxId:  sandboxId
             }
         },
@@ -73,6 +72,17 @@ export async function createPod(sandboxId){
     const response = await k8sCoreV1Api.createNamespacedPod({
         namespace: "default",
         body: podManifest
+    })
+
+    return response;
+}
+
+export async function deletePod(sandboxId){
+    const response = await k8sCoreV1Api.deleteNamespacedPod({
+        namespace: 'default',
+        name: `sandbox-pod-${sandboxId}`
+    },{
+        gracePeriodSeconds: 0,
     })
 
     return response;
