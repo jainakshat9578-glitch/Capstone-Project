@@ -9,7 +9,7 @@ const subscriber = new Redis(process.env.REDIS_URL); // redis ko fire krne ke li
 export async function createSandboxKey(sandboxId){
     await redis.set(`sandbox:${sandboxId}`, JSON.stringify({
         status: 'active'
-    }), "EX", 120); // TTL: 120 seconds
+    }), "EX", 60*20); // TTL: 120 seconds
 }
 
 subscriber.config('SET', 'notify-keyspace-events', 'Ex'); // redis jo event fire kr rha hoga usko hum listen krenge

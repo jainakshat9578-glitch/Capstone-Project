@@ -21,12 +21,25 @@
          dockerfile: dockerfile
        sync:
            infer: 
-             - "src/**"     
+             - "src/**"    
+
+     - image: notification
+       context: notification
+       docker:
+          dockerfile: dockerfile    
+       sync:
+           infer:
+             - "src/**"          
 
      - image: agent
        context: sandbox/agent
        docker:
          dockerfile: dockerfile
+
+     - image: sync-agent
+       context: sandbox/sync-agent
+       docker:
+         dockerfile: dockerfile    
 
      - image: router
        context: sandbox/router
@@ -55,3 +68,5 @@
      - k8s/router-service.yml
      - k8s/ingress.yml
      - k8s/secrets.yml
+     - k8s/notification-deployment.yml
+     - k8s/notification-service.yml
