@@ -28,16 +28,16 @@ router.post("/start",authMiddleware , async (req,res) => {
 
     const projectId = req.body.projectId;
 
-    const project = await project.findOne({ _id: projectId, user: req.user.id});
+    const foundproject = await project.findOne({ _id: projectId, user: req.user.id});
 
-    if(!project){
+    if(!foundproject){
         return res.status(404).json({ message: 'Project not found or access denied'});
     }
 
   const sandboxId = uuid()
 
   await Promise.all([
-    createPod(sandboxId, projectId),
+    createPod(sandboxId, foundproject._id),
     createService(sandboxId),
     createSandboxKey(sandboxId)
   ])

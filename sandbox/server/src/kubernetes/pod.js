@@ -6,6 +6,7 @@ export async function createPod(sandboxId,projectId){
         metadata: {
             name: `sandbox-pod-${sandboxId}`,
             labels: {
+                app: "sandbox",
                 sandboxId:  sandboxId
             }
         },
@@ -94,11 +95,11 @@ export async function createPod(sandboxId,projectId){
                             }
                         },
                         {
-                            name: "AWS_SECRET_ACCESS_KEY_ID",
+                            name: "AWS_SECRET_ACCESS_KEY",
                             valueFrom: {
                                secretKeyRef: {
                                   name: "aws",
-                                  key: "AWS_SECRET_ACCESS_KEY_ID"
+                                  key: "AWS_SECRET_ACCESS_KEY"
                                }
                             }
                         },

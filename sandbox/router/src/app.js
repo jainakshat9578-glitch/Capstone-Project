@@ -65,6 +65,11 @@ app.use(async (req, res, next) => {
 const server = http.createServer(app);
 
 server.on('upgrade', (req, socket, head) => {
+
+    console.log("========== WS UPGRADE ==========");
+    console.log(req.url);
+    console.log(req.headers.host);
+
     const host = req.headers.host;
     if (!host) { socket.destroy(); return; }
 

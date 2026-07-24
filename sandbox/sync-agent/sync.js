@@ -4,7 +4,7 @@ import { S3Client, PutObjectCommand, ListObjectsV2Command, GetObjectCommand } fr
 import fs from 'fs';
 import path from 'path';
 
-const s3Client = new s3Client({
+const s3Client = new S3Client({
     region: process.env.AWS_REGION,
     credentials: {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
